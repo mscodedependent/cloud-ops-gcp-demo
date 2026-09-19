@@ -32,7 +32,7 @@ jobs:
 
       - uses: terraform-linters/setup-tflint@v4
       - run: tflint --chdir=infra/environments/${{ matrix.env }} --recursive --init
-      - run: tflint --chdir=infra/environments/${{ matrix.env }} --recursiv
+      - run: tflint --chdir=infra/environments/${{ matrix.env }} --recursive
       - uses: bridgecrewio/checkov-action@master
         with:
           directory: infra/
