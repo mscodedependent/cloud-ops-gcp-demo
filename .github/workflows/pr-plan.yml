@@ -48,7 +48,8 @@ jobs:
           #   deprecated require_ssl attribute, so it flags a false negative.
           skip_check: CKV_GCP_84,CKV_GCP_79,CKV_GCP_6
       - run: |
-          terraform -chdir=infra/environments/${{ matrix.env }} plan -no-color -out=tfplan | tee plan-${{ matrix.env }}.txt
+          set -o pipefail
+          terraform -chdir=infra/environments/${{ matrix.env }} plan -no-color -out=tfplan 2>&1 | tee plan-${{ matrix.env }}.txt
 
       - uses: actions/github-script@v7
         with:
