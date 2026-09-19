@@ -12,7 +12,6 @@ resource "google_service_networking_connection" "private_vpc_connection" {
   reserved_peering_ranges = [google_compute_global_address.private_ip_range.name]
 }
 
-#checkov:skip=CKV_GCP_79:Pinned to POSTGRES_15 deliberately for this project; major-version upgrades are handled as a planned migration, not a reactive lint fix.
 resource "google_sql_database_instance" "instance" {
   name             = "${var.env}-sql"
   database_version = "POSTGRES_15"
@@ -44,6 +43,10 @@ resource "google_sql_database_instance" "instance" {
     }
     database_flags {
       name  = "log_min_messages"
+      value = "error"
+    }
+    database_flags {
+      name  = "log_min_error_statement"
       value = "error"
     }
     database_flags {

@@ -37,6 +37,14 @@ jobs:
         with:
           directory: infra/
           soft_fail: false
+          # CKV_GCP_84: Google-managed encryption is sufficient here; CSEK adds KMS
+          #   operational overhead not justified for this project.
+          # CKV_GCP_79: Pinned to POSTGRES_15 deliberately; major-version upgrades are
+          #   handled as a planned migration, not a reactive lint fix.
+          # CKV_GCP_6: SSL is enforced via ssl_mode = "ENCRYPTED_ONLY" (the modern
+          #   attribute); this checkov version's policy still only recognizes the
+          #   deprecated require_ssl attribute, so it flags a false negative.
+          skip_check: CKV_GCP_84,CKV_GCP_79,CKV_GCP_6
       - run: |
           terraform -chdir=infra/environments/${{ matrix.env }} plan -no-color -out=tfplan | tee plan-${{ matrix.env }}.txt
 
