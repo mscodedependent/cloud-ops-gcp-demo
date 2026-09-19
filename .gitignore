@@ -16,6 +16,10 @@ crash.*.log
 *.tfvars
 *.tfvars.json
 
+# ...except committed, non-sensitive per-environment auto-loaded vars
+# (secrets like db_password are never put in these; they come from CI secrets)
+!*.auto.tfvars
+
 # Ignore override files as they are usually used to override resources locally and so
 # are not checked in
 override.tf

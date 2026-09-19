@@ -15,6 +15,8 @@ jobs:
       matrix:
         env: [dev]
     runs-on: ubuntu-latest
+    env:
+      TF_VAR_db_password: ${{ secrets[format('DB_PASSWORD_{0}', matrix.env)] }}
     steps:
       - uses: actions/checkout@v4
 
