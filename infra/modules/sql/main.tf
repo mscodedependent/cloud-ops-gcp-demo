@@ -12,6 +12,7 @@ resource "google_service_networking_connection" "private_vpc_connection" {
   reserved_peering_ranges = [google_compute_global_address.private_ip_range.name]
 }
 
+#checkov:skip=CKV_GCP_79:Pinned to POSTGRES_15 deliberately for this project; major-version upgrades are handled as a planned migration, not a reactive lint fix.
 resource "google_sql_database_instance" "instance" {
   name             = "${var.env}-sql"
   database_version = "POSTGRES_15"
@@ -23,6 +24,7 @@ resource "google_sql_database_instance" "instance" {
     ip_configuration {
       ipv4_enabled    = false
       private_network = var.network_id
+      ssl_mode        = "ENCRYPTED_ONLY"
     }
     backup_configuration {
       enabled                        = true
@@ -30,6 +32,42 @@ resource "google_sql_database_instance" "instance" {
     }
     database_flags {
       name  = "cloudsql.iam_authentication"
+      value = "on"
+    }
+    database_flags {
+      name  = "cloudsql.enable_pgaudit"
+      value = "on"
+    }
+    database_flags {
+      name  = "log_lock_waits"
+      value = "on"
+    }
+    database_flags {
+      name  = "log_min_messages"
+      value = "error"
+    }
+    database_flags {
+      name  = "log_statement"
+      value = "ddl"
+    }
+    database_flags {
+      name  = "log_disconnections"
+      value = "on"
+    }
+    database_flags {
+      name  = "log_hostname"
+      value = "on"
+    }
+    database_flags {
+      name  = "log_connections"
+      value = "on"
+    }
+    database_flags {
+      name  = "log_checkpoints"
+      value = "on"
+    }
+    database_flags {
+      name  = "log_duration"
       value = "on"
     }
   }
