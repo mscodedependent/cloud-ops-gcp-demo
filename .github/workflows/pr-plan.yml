@@ -2,7 +2,7 @@ name: PR Plan
 
 on:
   pull_request:
-    paths: ["infra/**"]
+    paths: ["infra/**", ".github/workflows/**"]
 
 permissions:
   id-token: write
